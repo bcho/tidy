@@ -18,6 +18,7 @@ var (
 
 func main() {
 	path := mustGetCleanablePath()
+	mustConfirmPath(path)
 	fileGroups := mustFilterFiles(path)
 	mustTidyFiles(fileGroups)
 }
@@ -48,6 +49,21 @@ func mustGetCleanablePath() (path string) {
 	}
 
 	return
+}
+
+func mustConfirmPath(path string) {
+	var response string
+	const CONFIRM = "yes"
+
+	fmt.Printf("will process %s, go on? (yes/no): ", path)
+	_, err := fmt.Scanln(&response)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if response != CONFIRM {
+		fmt.Fprintf(os.Stderr, "aborted\n")
+		os.Exit(1)
+	}
 }
 
 func mustFilterFiles(root string) map[string]string {
