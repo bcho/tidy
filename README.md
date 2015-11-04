@@ -12,3 +12,7 @@ $ tidy
 $ tidy ../foo
 $ tidy /path/to/my/dir
 ```
+
+## LICENSE
+
+MIT
