@@ -23,10 +23,12 @@ var (
 type ruleFilter func(string, string, os.FileInfo) (string, error)
 
 func filterWhitelist(root, path string, info os.FileInfo) (string, error) {
-	if info.Name() == "." || info.Name() == ".." {
+	// Exclude hidden files.
+	if strings.HasPrefix(info.Name(), ".") {
 		return SKIPPED, errStopPropagation
 	}
 
+	// Exclude archive dir.
 	if strings.HasPrefix(info.Name(), ARCHIVE_DIR_NAME) {
 		return SKIPPED, errStopPropagation
 	}

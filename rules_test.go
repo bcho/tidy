@@ -22,7 +22,7 @@ func (m mockFileInfo) IsDir() bool        { return m.isDir }
 func (m mockFileInfo) Sys() interface{}   { return nil }
 
 func TestFilterWhitelist(t *testing.T) {
-	for _, name := range []string{".", ".."} {
+	for _, name := range []string{".", "..", ".abc", "..abcde"} {
 		dotFile := mockFileInfo{name: name}
 		to, err := filterWhitelist("", "", dotFile)
 		if to != SKIPPED || err != errStopPropagation {
@@ -34,14 +34,6 @@ func TestFilterWhitelist(t *testing.T) {
 	to, err := filterWhitelist("", "", file)
 	if to != SKIPPED || err != errStopPropagation {
 		t.Errorf("should exclude archive dir: %s %q", to, err)
-	}
-
-	for _, name := range []string{".abc", "..abcd", "foobar"} {
-		normalFile := mockFileInfo{name: name}
-		to, err := filterWhitelist("", "", normalFile)
-		if to != SKIPPED || err != errNextFilter {
-			t.Errorf("should skip normal files: %s %q", to, err)
-		}
 	}
 }
 
